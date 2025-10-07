@@ -4,6 +4,7 @@ from asyncio import to_thread
 from io import BytesIO
 from random import choice, getrandbits, randint
 from time import perf_counter
+import re
 
 import discord
 from discord.ext import commands
@@ -306,6 +307,18 @@ class RandCommands(commands.Cog):
             c.upper() if randint(0, 1) == 0 else c.lower() for c in text
         )
         await reply(ctx, mocked)
+
+    @commands.command(help="Replaces various sequences with ORE. May have stuff like 'piston'->'biston' later.")
+    async def oreify(self, ctx, *, text: str):
+        result = text
+
+        result = re.sub(
+            re.compile(r"(er|or(e?)?)|ear", re.IGNORECASE),
+            "ORE",
+            result
+        )
+
+        await reply(ctx, result)
 
 async def setup(bot):
     await bot.add_cog(RandCommands(bot))
